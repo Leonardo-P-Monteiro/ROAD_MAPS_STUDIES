@@ -128,10 +128,10 @@ Quando sua aplicação precisa de uma informação, ela segue um fluxo de duas e
 ### 📊 Diagrama
 
 ```mermaid
-flowchart TD
-    A["🚀 Aplicação precisa de dados"] --> B{"🔀 Dado existe\nno Cache?"}
-    B -->|Sim (Cache Hit)| C["✅ Recupera da RAM\n(Rápido, < 1ms)"]
-    B -->|Não (Cache Miss)| D["🔄 Consulta o Banco de Dados\n(Lento, ~50ms)"]
+graph TD
+    A["🚀 Aplicação precisa de dados"] --> B{"🔀 Dado existe<br/>no Cache?"}
+    B -->|Sim - Cache Hit| C["✅ Recupera da RAM<br/>Rápido, menos de 1ms"]
+    B -->|Não - Cache Miss| D["🔄 Consulta o Banco de Dados<br/>Lento, ~50ms"]
     D --> E["💾 Salva Cópia no Cache"]
     E --> C
 
@@ -139,6 +139,7 @@ flowchart TD
     style C fill:#2d6a4f,color:#fff
     style D fill:#e76f51,color:#fff
 ```
+
 
 ### 💻 Na Prática
 
@@ -331,12 +332,12 @@ flowchart LR
 
 Antes de avançar para os próximos módulos (onde colocaremos a mão na massa no Django), verifique se você consegue:
 
-- [ ] Identificar a diferença entre "Source of Truth" e "Cache".
-- [ ] Explicar com suas palavras o fluxo de um "Cache Hit" e "Cache Miss".
-- [ ] Justificar por que o banco de dados não deve ser a única resposta da sua arquitetura.
-- [ ] Explicar o que é TTL e o trade-off de escolher um tempo de vida muito alto ou muito baixo.
-- [ ] Identificar a origem do "Stale Data".
-- [ ] Listar 3 exemplos de onde o cache atua além da sua aplicação de backend.
+- [ ✔️ ] Identificar a diferença entre "Source of Truth" e "Cache".
+- [ ✔️ ] Explicar com suas palavras o fluxo de um "Cache Hit" e "Cache Miss".
+- [ ✔️ ] Justificar por que o banco de dados não deve ser a única resposta da sua arquitetura.
+- [ ✔️ ] Explicar o que é TTL e o trade-off de escolher um tempo de vida muito alto ou muito baixo.
+- [ ✔️ ] Identificar a origem do "Stale Data".
+- [ ✔️ ] Listar 3 exemplos de onde o cache atua além da sua aplicação de backend.
 
 ---
 

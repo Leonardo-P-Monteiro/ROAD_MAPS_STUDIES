@@ -38,7 +38,7 @@ Baseado no seu perfil, você já atende aos pré-requisitos:
 
 ---
 
-## Módulo 1: O que é Cache e Por que Você Precisa Dele 🟢
+## ✅ Módulo 1: O que é Cache e Por que Você Precisa Dele 🟢
 
 ### 🎯 Por que estudar este módulo?
 
@@ -46,10 +46,10 @@ Antes de tocar em qualquer código ou configuração, você precisa construir um
 
 | # | Tópico | Conceitos-Chave | Objetivo Prático | Status |
 |---|--------|-----------------|-------------------|--------|
-| 1.1 | O problema que cache resolve | Latência, throughput, gargalo de I/O, custo de consultas repetidas ao banco, tempo de resposta (response time) | Identificar cenários no seu código Django onde a mesma consulta ao banco é feita repetidamente sem necessidade | ⬜ |
-| 1.2 | O que é cache (modelo mental) | Armazenamento temporário, par chave-valor (key-value), cache hit vs cache miss, origem dos dados (source of truth), cópia vs original | Desenhar (em papel ou mental) o fluxo de uma requisição com e sem cache, explicando em suas palavras o que muda | ⬜ |
-| 1.3 | TTL, expiração e stale data | TTL (Time To Live), expiração absoluta, expiração por inatividade, dado obsoleto (stale), trade-off entre frescor e velocidade | Explicar para si mesmo: "Se eu colocar TTL de 5 minutos, o que acontece quando o dado muda no banco no minuto 2?" | ⬜ |
-| 1.4 | Onde cache pode existir (camadas) | Cache de CPU (L1/L2/L3), cache de disco, cache de DNS, cache de CDN, cache de aplicação, cache de banco (query cache), cache de navegador (HTTP Cache-Control, ETag) | Identificar pelo menos 3 camadas de cache que já atuam silenciosamente quando você acessa uma página web | ⬜ |
+| 1.1 | O problema que cache resolve | Latência, throughput, gargalo de I/O, custo de consultas repetidas ao banco, tempo de resposta (response time) | Identificar cenários no seu código Django onde a mesma consulta ao banco é feita repetidamente sem necessidade | ✅ |
+| 1.2 | O que é cache (modelo mental) | Armazenamento temporário, par chave-valor (key-value), cache hit vs cache miss, origem dos dados (source of truth), cópia vs original | Desenhar (em papel ou mental) o fluxo de uma requisição com e sem cache, explicando em suas palavras o que muda | ✅ |
+| 1.3 | TTL, expiração e stale data | TTL (Time To Live), expiração absoluta, expiração por inatividade, dado obsoleto (stale), trade-off entre frescor e velocidade | Explicar para si mesmo: "Se eu colocar TTL de 5 minutos, o que acontece quando o dado muda no banco no minuto 2?" | ✅ |
+| 1.4 | Onde cache pode existir (camadas) | Cache de CPU (L1/L2/L3), cache de disco, cache de DNS, cache de CDN, cache de aplicação, cache de banco (query cache), cache de navegador (HTTP Cache-Control, ETag) | Identificar pelo menos 3 camadas de cache que já atuam silenciosamente quando você acessa uma página web | ✅ |
 
 ### 🔗 Conexão com o próximo módulo
 
