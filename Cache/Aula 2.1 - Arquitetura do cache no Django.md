@@ -202,12 +202,12 @@ Você pode querer salvar sessões de usuários em um banco Redis muito rápido, 
 flowchart LR
     subgraph seu_codigo ["Seu Código"]
         A1["from django.core.cache<br/>import cache"]
-        A2["from django.core.cache<br/>import caches<br/><br/>cofre = caches[&#39;seguro&#39;]"]
+        A2["from django.core.cache<br/>import caches<br/><br/>cofre = caches['seguro']"]
     end
 
     subgraph config_caches ["Configuração CACHES (settings.py)"]
-        B1["&#39;default&#39;: { ... }"]
-        B2["&#39;seguro&#39;: { ... }"]
+        B1["'default': { ... }"]
+        B2["'seguro': { ... }"]
     end
 
     A1 -->|Aponta automaticamente para| B1
