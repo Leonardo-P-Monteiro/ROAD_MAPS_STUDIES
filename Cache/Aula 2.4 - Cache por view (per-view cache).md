@@ -74,11 +74,11 @@ Quando você decora uma view com `@cache_page(timeout)`, o Django cria uma chave
 
 ```mermaid
 flowchart TD
-    A[Nova Requisição HTTP] --> B{Existe no Cache?}
-    B -- Sim --> C[Retorna Resposta do Cache]
-    C --> F[Fim da Requisição, Rápido!]
-    B -- Não --> D[Executa a View (DB, Lógica)]
-    D --> E[Salva Resposta no Cache]
+    A["Nova Requisição HTTP"] --> B{"Existe no Cache?"}
+    B -- Sim --> C["Retorna Resposta do Cache"]
+    C --> F["Fim da Requisição, Rápido!"]
+    B -- Não --> D["Executa a View (DB, Lógica)"]
+    D --> E["Salva Resposta no Cache"]
     E --> F
     
     style B fill:#1d3557,color:#fff
@@ -117,24 +117,40 @@ def lista_artigos(request):
 ```python
 # api.py (Django Ninja)
 from django.views.decorators.cache import cache_page
-from ninja import Router
+from ninja import NinjaAPI, Router
 from .models import Artigo
 from .schemas import ArtigoSchema
 
+api = NinjaAPI()
 router = Router()
 
-# No Django Ninja, aplique o decorator via decorators= no endpoint
-@router.get("/artigos/", response=list[ArtigoSchema])
+# ✅ Forma recomendada: passa o decorator no parâmetro decorators=[] da rota
+@router.get(
+    "/artigos/",
+    response=list[ArtigoSchema],
+    decorators=[cache_page(60)],  # Aplica o decorator de cache diretamente no endpoint
+)
 def lista_artigos(request):
     print("Executando a query no banco de dados...")
     return Artigo.objects.all().order_by('-data_publicacao')
 
-# Ou via URLconf com cache_page envolvendo a rota:
-# path('api/', cache_page(60)(api.urls)),
+api.add_router("/blog/", router)
+```
+
+```python
+# urls.py (Alternativa: cachear toda a instância da NinjaAPI via URLconf)
+from django.urls import path
+from django.views.decorators.cache import cache_page
+from .api import api
+
+urlpatterns = [
+    # Envolve toda a árvore de URLs do Ninja com cache de 60 segundos
+    path("api/", cache_page(60)(api.urls)),
+]
 ```
 
 > [!NOTE]
-> No Django Ninja, o `@cache_page` não pode ser aplicado diretamente como decorator nos endpoints. Use a abordagem via URLconf: `path('api/', cache_page(60)(router.urls))` ou aplique via middleware customizado. Já no DRF com `@api_view`, funciona diretamente.
+> No Django Ninja, a forma mais idiomática e granular para aplicar decorators clássicos do Django (como `@cache_page` ou `@vary_on_headers`) é através do argumento `decorators=[...]` nos métodos de rota (`@router.get`, `@api.get`, etc.), passando uma lista de decorators.
 
 ### ⚠️ Armadilhas Comuns
 
