@@ -1,12 +1,12 @@
-# 🗺️ Roadmap de Estudos: Cache em Django, DRF — Redis e Outras Opções
+# 🗺️ Roadmap de Estudos: Cache em Django, DRF, Django Ninja — Redis e Outras Opções
 
 ## Meta de Aprendizado
 
-Ao concluir este roadmap, você será capaz de **projetar e implementar estratégias de cache em APIs Django/DRF**, utilizando Redis como backend principal (e conhecendo alternativas), com compreensão dos fundamentos, das configurações do framework, das técnicas de invalidação e das boas práticas de monitoramento — tudo isso aplicável imediatamente aos projetos nos quais você trabalha.
+Ao concluir este roadmap, você será capaz de **projetar e implementar estratégias de cache em APIs Django/DRF e Django Ninja**, utilizando Redis como backend principal (e conhecendo alternativas), com compreensão dos fundamentos, das configurações do framework, das técnicas de invalidação e das boas práticas de monitoramento — tudo isso aplicável imediatamente aos projetos nos quais você trabalha.
 
 ## Contexto
 
-- **Stack**: Python · Django 5.x · Django REST Framework · Redis (+ Memcached, cache em banco, cache em arquivo como alternativas)
+- **Stack**: Python · Django 5.x · Django REST Framework · Django Ninja · Redis (+ Memcached, cache em banco, cache em arquivo como alternativas)
 - **Aplicação**: Otimização de performance em APIs REST
 - **Por que importa**: Cache é uma das técnicas de maior impacto em performance com menor custo de implementação. Uma API sem cache pode ser 10x–100x mais lenta que a mesma API com cache bem aplicado. Em cenários reais de produção, cache reduz carga no banco de dados, diminui tempo de resposta para o usuário final e reduz custos de infraestrutura. É um conhecimento esperado de qualquer desenvolvedor backend que trabalhe com APIs em escala.
 
@@ -31,10 +31,11 @@ Baseado no seu perfil, você já atende aos pré-requisitos:
 | 2 | O Framework de Cache do Django | 🟢 Fundamento | 5 | ~3h |
 | 3 | Redis — Seu Backend de Cache em Produção | 🟡 Intermediário | 5 | ~3.5h |
 | 4 | Cache Aplicado a APIs com DRF | 🟡 Intermediário | 5 | ~4h |
-| 5 | Invalidação de Cache — O Problema Mais Difícil | 🔴 Avançado | 4 | ~3h |
-| 6 | Monitoramento, Debugging e Boas Práticas | 🔵 Prático | 4 | ~2.5h |
+| 5 | Cache Aplicado a APIs com Django Ninja | 🟡 Intermediário | 5 | ~3.5h |
+| 6 | Invalidação de Cache — O Problema Mais Difícil | 🔴 Avançado | 4 | ~3h |
+| 7 | Monitoramento, Debugging e Boas Práticas | 🔵 Prático | 4 | ~2.5h |
 
-**Tempo total estimado: ~18 horas de estudo focado**
+**Tempo total estimado: ~21.5 horas de estudo focado**
 
 ---
 
@@ -68,7 +69,7 @@ O Django oferece um **framework de cache integrado e flexível** que abstrai bac
 | 2.1 | Arquitetura do cache no Django | `django.core.cache`, setting `CACHES`, backend padrão (`LocMemCache`), `default` alias, múltiplos aliases de cache | Configurar `CACHES` no `settings.py` com o backend `LocMemCache` e verificar que funciona com `cache.set()` e `cache.get()` no Django shell | ✅ |
 | 2.2 | Backends disponíveis no Django | `LocMemCache` (memória local), `FileBasedCache` (arquivos), `DatabaseCache` (tabela no banco via `createcachetable`), `MemcachedCache`, `DummyCache` (para testes) | Trocar o backend para `DatabaseCache`, rodar `python manage.py createcachetable`, testar `cache.set()`/`cache.get()` e ver os dados na tabela do banco | ✅ |
 | 2.3 | API de baixo nível do cache | `cache.set(key, value, timeout)`, `cache.get(key, default)`, `cache.delete(key)`, `cache.clear()`, `cache.get_or_set()`, `cache.set_many()`, `cache.get_many()`, `cache.has_key()` | Abrir o Django shell, armazenar dados com `cache.set()`, recuperar com `cache.get()`, testar expiração via `timeout`, e verificar `cache.has_key()` após expiração | ✅ |
-| 2.4 | Cache por view (per-view cache) | Decorator `@cache_page(timeout)`, `CACHE_MIDDLEWARE_SECONDS`, `vary_on_headers`, `vary_on_cookie`, `key_prefix` | Decorar uma view Django simples com `@cache_page(60)` e verificar (via print/log ou Django Debug Toolbar) que a segunda requisição não executa a view novamente | ⬜ |
+| 2.4 | Cache por view (per-view cache) | Decorator `@cache_page(timeout)`, `CACHE_MIDDLEWARE_SECONDS`, `vary_on_headers`, `vary_on_cookie`, `key_prefix` | Decorar uma view Django simples com `@cache_page(60)` e verificar (via print/log ou Django Debug Toolbar) que a segunda requisição não executa a view novamente | ✅ |
 | 2.5 | Cache de template fragments e site-wide | `{% load cache %}`, tag `{% cache timeout key %}`, cache middleware (`UpdateCacheMiddleware`, `FetchFromCacheMiddleware`), order dos middlewares | Cachear um bloco de template com `{% cache 300 sidebar %}` e confirmar que o código dentro do bloco só executa uma vez a cada 5 minutos | ⬜ |
 
 ### 🔗 Conexão com o próximo módulo
@@ -113,11 +114,31 @@ O DRF adiciona camadas de abstração sobre as views do Django (serializers, vie
 
 ### 🔗 Conexão com o próximo módulo
 
-Agora que você sabe *como* cachear suas APIs, o desafio passa a ser: *quando* o cache deve ser removido ou atualizado? Se um produto muda no banco de dados mas o cache ainda tem a versão antiga, seu usuário vê dados obsoletos. O próximo módulo ataca esse problema — o mais difícil de cache: **invalidação**.
+Agora que você domina cache em APIs DRF, o próximo módulo aplica os mesmos conceitos ao **Django Ninja** — um framework moderno, baseado em type hints e async, que tem suas próprias particularidades para cache. Isso amplia o seu repertório para que você consiga implementar cache independentemente do framework de API que o projeto use.
 
 ---
 
-## Módulo 5: Invalidação de Cache — O Problema Mais Difícil 🔴
+## Módulo 5: Cache Aplicado a APIs com Django Ninja 🟡
+
+### 🎯 Por que estudar este módulo?
+
+O Django Ninja é um framework moderno para construir APIs em Django, baseado em **type hints do Python** e com suporte nativo a **async**. Ele é uma alternativa crescente ao DRF, mais leve e performático. Cachear APIs Django Ninja exige abordagens diferentes do DRF — não há `ViewSets` nem `method_decorator` da mesma forma. Este módulo te ensina os padrões corretos para aplicar cache no Django Ninja, garantindo que você tenha repertório para trabalhar com **ambos os frameworks**.
+
+| # | Tópico | Conceitos-Chave | Objetivo Prático | Status |
+|---|--------|-----------------|-------------------|--------|
+| 5.1 | Arquitetura do Django Ninja vs DRF | `NinjaAPI`, `Router`, endpoints como funções (function-based), `Schema` (Pydantic) vs `Serializer`, type hints, decorators de rota (`@api.get`, `@router.get`), ausência de ViewSets | Criar uma API mínima com Django Ninja (`NinjaAPI`, `Router`, `Schema`) e entender como a estrutura difere do DRF — identificar onde o cache será aplicado (não há `dispatch()` nem `ViewSet`) | ⬜ |
+| 5.2 | `@cache_page` e decorators em endpoints Django Ninja | `cache_page` como decorator direto em funções de endpoint, `django.views.decorators.cache.cache_page`, diferença de aplicação vs DRF (sem `method_decorator`), `vary_on_headers` em endpoints Ninja | Aplicar `@cache_page(60)` diretamente a um endpoint `@api.get("/products")`, fazer duas requisições e confirmar que a segunda é servida do cache | ⬜ |
+| 5.3 | Cache manual em endpoints Django Ninja | `cache.get()`/`cache.set()` dentro da função do endpoint, construção de chaves com `request.GET` (query params), `HttpRequest` vs DRF `Request`, retornando dados cacheados diretamente do dict/list | Implementar cache manual em um endpoint de listagem: construir chave com query params, verificar cache, se miss executar query + `cache.set()`, e retornar dados cacheados no hit — comparar a simplicidade com o equivalente DRF | ⬜ |
+| 5.4 | Cache com endpoints async (`async def`) | `async def` em endpoints Django Ninja, `await` com cache (limitação: `django.core.cache` é síncrono), `sync_to_async` para wrapping de chamadas de cache, uso de `django-redis` com async, trade-offs sync vs async para cache | Criar um endpoint `async def` que usa cache via `sync_to_async(cache.get)` e `sync_to_async(cache.set)`, testar que funciona corretamente e entender quando async faz sentido para endpoints cacheados | ⬜ |
+| 5.5 | Decorator customizado de cache para Django Ninja | Criação de um decorator reutilizável `@ninja_cache(timeout, key_func)`, abstração da lógica de cache manual, `key_func` para geração dinâmica de chaves, composição de decorators | Implementar um decorator `@ninja_cache(timeout=300)` que encapsula a lógica de `cache.get()`/`cache.set()` e aplicá-lo a múltiplos endpoints — eliminando repetição de código | ⬜ |
+
+### 🔗 Conexão com o próximo módulo
+
+Agora que você sabe cachear APIs tanto com DRF quanto com Django Ninja, o desafio passa a ser: *quando* o cache deve ser removido ou atualizado? Se um produto muda no banco de dados mas o cache ainda tem a versão antiga, seu usuário vê dados obsoletos. O próximo módulo ataca esse problema — o mais difícil de cache: **invalidação**.
+
+---
+
+## Módulo 6: Invalidação de Cache — O Problema Mais Difícil 🔴
 
 ### 🎯 Por que estudar este módulo?
 
@@ -127,10 +148,10 @@ Cachear dados é a parte fácil. A parte difícil é garantir que **dados obsole
 
 | # | Tópico | Conceitos-Chave | Objetivo Prático | Status |
 |---|--------|-----------------|-------------------|--------|
-| 5.1 | Estratégias de invalidação | Invalidação por TTL (expiração passiva), invalidação explícita (`cache.delete(key)`), invalidação por padrão (`cache.delete_pattern("products:*")` com django-redis), write-through vs write-behind vs cache-aside (padrões de escrita) | Implementar invalidação explícita: ao salvar/atualizar um `Product` via API, deletar a chave de cache correspondente e verificar que a próxima requisição traz o dado atualizado | ⬜ |
-| 5.2 | Invalidação via Django Signals | `post_save`, `post_delete`, `m2m_changed`, conectar signal a função que invalida cache, `dispatch_uid`, receiver com `sender` específico | Criar um signal `post_save` para o model `Product` que invalida automaticamente o cache de listagem e detalhe daquele produto, e testar editando via admin ou shell | ⬜ |
-| 5.3 | Invalidação via override de métodos no ViewSet | Override de `perform_create()`, `perform_update()`, `perform_destroy()` no ViewSet para adicionar `cache.delete()` após operações de escrita | Implementar invalidação no `ProductViewSet`: após `perform_update()`, deletar cache de listagem e detalhe; testar fazendo PUT via API e verificando que GET retorna dado atualizado | ⬜ |
-| 5.4 | Versionamento de cache (cache versioning) | Cache key com versão (`f"products:v{version}:list"`), incremento de versão ao invés de deletar chaves, `cache.incr()`, padrão generation-based invalidation | Implementar versionamento: armazenar uma versão no cache (`cache.get_or_set("products:version", 1)`), incluí-la na chave, e incrementar a versão no `post_save` signal ao invés de deletar chaves individualmente | ⬜ |
+| 6.1 | Estratégias de invalidação | Invalidação por TTL (expiração passiva), invalidação explícita (`cache.delete(key)`), invalidação por padrão (`cache.delete_pattern("products:*")` com django-redis), write-through vs write-behind vs cache-aside (padrões de escrita) | Implementar invalidação explícita: ao salvar/atualizar um `Product` via API, deletar a chave de cache correspondente e verificar que a próxima requisição traz o dado atualizado | ⬜ |
+| 6.2 | Invalidação via Django Signals | `post_save`, `post_delete`, `m2m_changed`, conectar signal a função que invalida cache, `dispatch_uid`, receiver com `sender` específico | Criar um signal `post_save` para o model `Product` que invalida automaticamente o cache de listagem e detalhe daquele produto, e testar editando via admin ou shell | ⬜ |
+| 6.3 | Invalidação via override de métodos no ViewSet/Endpoint | Override de `perform_create()`, `perform_update()`, `perform_destroy()` no ViewSet DRF ou invalidação dentro de endpoints de escrita no Django Ninja para adicionar `cache.delete()` após operações de escrita | Implementar invalidação no `ProductViewSet` (DRF) e em endpoints POST/PUT/DELETE (Django Ninja): após escrita, deletar cache de listagem e detalhe; testar fazendo PUT via API e verificando que GET retorna dado atualizado | ⬜ |
+| 6.4 | Versionamento de cache (cache versioning) | Cache key com versão (`f"products:v{version}:list"`), incremento de versão ao invés de deletar chaves, `cache.incr()`, padrão generation-based invalidation | Implementar versionamento: armazenar uma versão no cache (`cache.get_or_set("products:version", 1)`), incluí-la na chave, e incrementar a versão no `post_save` signal ao invés de deletar chaves individualmente | ⬜ |
 
 ### 🔗 Conexão com o próximo módulo
 
@@ -138,7 +159,7 @@ Com invalidação funcionando, seu cache está correto. Mas como saber se ele es
 
 ---
 
-## Módulo 6: Monitoramento, Debugging e Boas Práticas 🔵
+## Módulo 7: Monitoramento, Debugging e Boas Práticas 🔵
 
 ### 🎯 Por que estudar este módulo?
 
@@ -146,10 +167,10 @@ Cache que "funciona" mas ninguém monitora é uma bomba-relógio. Pode estar con
 
 | # | Tópico | Conceitos-Chave | Objetivo Prático | Status |
 |---|--------|-----------------|-------------------|--------|
-| 6.1 | Monitoramento do Redis | `redis-cli INFO`, `INFO memory`, `INFO stats` (keyspace_hits, keyspace_misses), `INFO keyspace`, hit ratio (hits / (hits + misses)), `MONITOR` (debug em tempo real), `DBSIZE` | Conectar no `redis-cli`, executar `INFO stats`, calcular o hit ratio do seu cache de teste e interpretar se está saudável (>80% é bom) | ⬜ |
-| 6.2 | Django Debug Toolbar + Cache Panel | Instalação `django-debug-toolbar`, panel de cache (cache calls, hits, misses, tempo), identificação de endpoints que não estão usando cache | Instalar Django Debug Toolbar com cache panel, acessar um endpoint cacheado pelo navegador e verificar no painel quantas chamadas ao cache foram feitas e se houve hit ou miss | ⬜ |
-| 6.3 | Boas práticas de keys e organização | Namespace de chaves (ex: `app:model:action:id`), keys legíveis vs keys hasheadas, separação de cache por database Redis (db 0, 1, 2...), `KEY_PREFIX` por ambiente (dev, staging, prod), evitar `KEYS *` em produção (usar `SCAN`) | Definir e documentar uma convenção de nomes de chaves para o seu projeto (ex: `myapp:products:list:page=1&ordering=-price`) e refatorar chaves existentes para seguir a convenção | ⬜ |
-| 6.4 | Patterns e anti-patterns | ✅ Cache-aside (lazy loading), ✅ Graceful degradation (`IGNORE_EXCEPTIONS`), ✅ TTLs diferenciados por tipo de dado, ❌ Cache de dados sensíveis (PII, tokens), ❌ Cache sem estratégia de invalidação, ❌ TTL infinito, ❌ Thundering herd (muitas requests simultaneamente após expiração), lock/mutex para evitar thundering herd | Revisar o cache implementado nos módulos anteriores e verificar: (1) existe invalidação? (2) TTL é razoável? (3) dados sensíveis estão protegidos? (4) a app funciona se Redis cair? | ⬜ |
+| 7.1 | Monitoramento do Redis | `redis-cli INFO`, `INFO memory`, `INFO stats` (keyspace_hits, keyspace_misses), `INFO keyspace`, hit ratio (hits / (hits + misses)), `MONITOR` (debug em tempo real), `DBSIZE` | Conectar no `redis-cli`, executar `INFO stats`, calcular o hit ratio do seu cache de teste e interpretar se está saudável (>80% é bom) | ⬜ |
+| 7.2 | Django Debug Toolbar + Cache Panel | Instalação `django-debug-toolbar`, panel de cache (cache calls, hits, misses, tempo), identificação de endpoints que não estão usando cache | Instalar Django Debug Toolbar com cache panel, acessar um endpoint cacheado pelo navegador e verificar no painel quantas chamadas ao cache foram feitas e se houve hit ou miss | ⬜ |
+| 7.3 | Boas práticas de keys e organização | Namespace de chaves (ex: `app:model:action:id`), keys legíveis vs keys hasheadas, separação de cache por database Redis (db 0, 1, 2...), `KEY_PREFIX` por ambiente (dev, staging, prod), evitar `KEYS *` em produção (usar `SCAN`) | Definir e documentar uma convenção de nomes de chaves para o seu projeto (ex: `myapp:products:list:page=1&ordering=-price`) e refatorar chaves existentes para seguir a convenção | ⬜ |
+| 7.4 | Patterns e anti-patterns | ✅ Cache-aside (lazy loading), ✅ Graceful degradation (`IGNORE_EXCEPTIONS`), ✅ TTLs diferenciados por tipo de dado, ❌ Cache de dados sensíveis (PII, tokens), ❌ Cache sem estratégia de invalidação, ❌ TTL infinito, ❌ Thundering herd (muitas requests simultaneamente após expiração), lock/mutex para evitar thundering herd | Revisar o cache implementado nos módulos anteriores e verificar: (1) existe invalidação? (2) TTL é razoável? (3) dados sensíveis estão protegidos? (4) a app funciona se Redis cair? | ⬜ |
 
 ---
 
@@ -198,9 +219,10 @@ Construa uma **API de catálogo de produtos** com Django REST Framework que impl
 | 2 | O Framework de Cache do Django | 5 | 0 | ⬜ |
 | 3 | Redis — Seu Backend de Cache em Produção | 5 | 0 | ⬜ |
 | 4 | Cache Aplicado a APIs com DRF | 5 | 0 | ⬜ |
-| 5 | Invalidação de Cache — O Problema Mais Difícil | 4 | 0 | ⬜ |
-| 6 | Monitoramento, Debugging e Boas Práticas | 4 | 0 | ⬜ |
-| **Total** | | **27** | **0** | ⬜ |
+| 5 | Cache Aplicado a APIs com Django Ninja | 5 | 0 | ⬜ |
+| 6 | Invalidação de Cache — O Problema Mais Difícil | 4 | 0 | ⬜ |
+| 7 | Monitoramento, Debugging e Boas Práticas | 4 | 0 | ⬜ |
+| **Total** | | **32** | **0** | ⬜ |
 
 > [!TIP]
 > **Como usar este roadmap**: Avance sequencialmente, módulo por módulo. Cada módulo constrói sobre o anterior. Ao completar um tópico, troque ⬜ por ✅. Ao iniciar um módulo, marque-o com 🔄. O objetivo não é velocidade — é compreensão. Se algo não ficou claro, releia antes de avançar. Use o Django shell e o `redis-cli` como seus laboratórios de teste.
