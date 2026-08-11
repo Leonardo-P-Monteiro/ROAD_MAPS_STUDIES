@@ -37,7 +37,7 @@ Ao concluir esta aula, você será capaz de:
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'cScale0': '#1d3557', 'cScale1': '#457b9d', 'cScale2': '#2d6a4f', 'cScale3': '#1d3557', 'cScale4': '#52796f', 'cScale5': '#e76f51'}}}%%
 mindmap
-  root(("🎯 Redis: O Padrão\nde Cache em Produção"))
+  root(("🎯 Redis: O Padrão de Cache em Produção"))
     🏷️ Fundamentos
       Banco In-Memory
       Armazenamento na RAM
