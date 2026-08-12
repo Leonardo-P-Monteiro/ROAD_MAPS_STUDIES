@@ -578,24 +578,17 @@ As conexões mais importantes a reter:
 ### Síntese em Um Olhar
 
 ```mermaid
-block-beta
-    columns 1
+flowchart TD
+    classDef main fill:#1d3557,color:#fff,stroke:#1d3557,stroke-width:2px
+    classDef sub fill:#457b9d,color:#fff,stroke:#457b9d,stroke-width:2px
 
-    block:titulo["🎯 Redis — Por que é o Padrão"]
-        columns 5
-        A["⚡ In-Memory\nRAM = sub-ms"]
-        B["📦 5+ Estruturas\nStrings, Hash,\nList, Set, ZSet"]
-        C["🔄 Single-Thread\nAtômico por\nnatureza"]
-        D["💾 Persistência\nRDB: Snapshot\nAOF: Log"]
-        E["🏆 vs Memcached\nMais completo\nEcossistema rico"]
-    end
+    R["🎯 Redis — Por que é o Padrão"]:::main
 
-    style titulo fill:#1d3557,color:#fff
-    style A fill:#457b9d,color:#fff
-    style B fill:#457b9d,color:#fff
-    style C fill:#457b9d,color:#fff
-    style D fill:#457b9d,color:#fff
-    style E fill:#457b9d,color:#fff
+    R --- A["⚡ In-Memory\nRAM = sub-ms"]:::sub
+    R --- B["📦 5+ Estruturas\nStrings, Hash, List, Set, ZSet"]:::sub
+    R --- C["🔄 Single-Thread\nAtômico por natureza"]:::sub
+    R --- D["💾 Persistência\nRDB: Snapshot\nAOF: Log"]:::sub
+    R --- E["🏆 vs Memcached\nMais completo\nEcossistema rico"]:::sub
 ```
 
 ### ✅ Checklist: O que devo saber
