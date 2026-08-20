@@ -223,7 +223,7 @@ flowchart TD
     end
 
     B -->|Instancia Backend| E
-    C -->|Conecta no Socket| G[("⚡ Redis DB 1\n(127.0.0.1:6379)")]
+    C -->|Conecta no Socket| G[("⚡ Redis DB 1<br/>(127.0.0.1:6379)")]
     F -->|Grava dados via TCP| G
 
     style A fill:#1d3557,color:#fff
@@ -464,18 +464,18 @@ flowchart TD
     end
 
     subgraph SERIALIZERS["⚙️ Escolha de Serializador no django-redis"]
-        PICKLE["PickleSerializer\n(pickle.dumps)"]
-        JSON_SER["JSONSerializer\n(json.dumps)"]
+        PICKLE["PickleSerializer<br/>(pickle.dumps)"]
+        JSON_SER["JSONSerializer<br/>(json.dumps)"]
     end
 
     subgraph REDIS_STORAGE["⚡ Armazenamento no Redis"]
-        DATA_PICKLE["Bytes Binários:\nb'\\x80\\x05\\x95...'"]
-        DATA_JSON["String Texto:\n'{\"usuario\": \"Leo\", \"admin\": true}'"]
+        DATA_PICKLE["Bytes Binários:<br/>b'\x80\x05\x95...'"]
+        DATA_JSON["String Texto JSON:<br/>{'usuario': 'Leo', 'admin': true}"]
     end
 
     subgraph CONSUMIDORES["👥 Quem consegue ler do Redis?"]
         ONLY_PY["Apenas Python / Django"]
-        ANY_LANG["Qualquer Linguagem\n(Node.js, Go, Rust, Java)"]
+        ANY_LANG["Qualquer Linguagem<br/>(Node.js, Go, Rust, Java)"]
     end
 
     OBJ -->|Opção A: Padrão| PICKLE
@@ -584,9 +584,9 @@ A arquitetura do `DefaultClient` disponibiliza três níveis crescentes de contr
 flowchart TD
     A["Aplicação Django"] --> B{"Qual nível de abstração você precisa?"}
     
-    B -->|Operações Básicas de Cache| C["Nível 1: API Django\ncache.get() / cache.set()"]
-    B -->|Limpeza por Padrão / TTL| D["Nível 2: django-redis\ncache.delete_pattern() / cache.ttl()"]
-    B -->|Estruturas Nativas / Pipelines| E["Nível 3: Cliente Nativo\nclient = cache.client.get_client()"]
+    B -->|Operações Básicas de Cache| C["Nível 1: API Django<br/>cache.get() / cache.set()"]
+    B -->|Limpeza por Padrão / TTL| D["Nível 2: django-redis<br/>cache.delete_pattern() / cache.ttl()"]
+    B -->|Estruturas Nativas / Pipelines| E["Nível 3: Cliente Nativo<br/>client = cache.client.get_client()"]
 
     C --> F["django_redis.client.DefaultClient"]
     D --> F
@@ -671,11 +671,11 @@ Veja como todos os conceitos desta aula se articulam para criar uma arquitetura 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1d3557', 'nodeBkg': '#1d3557', 'mainBkg': '#1d3557', 'primaryTextColor': '#ffffff', 'nodeTextColor': '#ffffff', 'textColor': '#1d3557'}}}%%
 graph TD
-    CENTRO(("🎯 Conexão Django + Redis\n(django-redis)")) -->|"driver de integração"| DREDIS["📦 django-redis\n(RedisCache Backend)"]
-    CENTRO -->|"declaração no settings"| CACHES_SET["⚙️ Setting CACHES\n(default alias)"]
-    CENTRO -->|"endereçamento de rede"| LOCATION["🌐 LOCATION\n(redis://host:port/db)"]
-    CENTRO -->|"conversão de dados"| SERIALIZERS["🔄 Serialização\n(Pickle vs JSON)"]
-    CENTRO -->|"controle avançado"| CLIENT_CLS["🛠️ CLIENT_CLASS\n(DefaultClient & raw_client)"]
+    CENTRO(("🎯 Conexão Django + Redis<br/>(django-redis)")) -->|"driver de integração"| DREDIS["📦 django-redis<br/>(RedisCache Backend)"]
+    CENTRO -->|"declaração no settings"| CACHES_SET["⚙️ Setting CACHES<br/>(default alias)"]
+    CENTRO -->|"endereçamento de rede"| LOCATION["🌐 LOCATION<br/>(redis://host:port/db)"]
+    CENTRO -->|"conversão de dados"| SERIALIZERS["🔄 Serialização<br/>(Pickle vs JSON)"]
+    CENTRO -->|"controle avançado"| CLIENT_CLS["🛠️ CLIENT_CLASS<br/>(DefaultClient & raw_client)"]
 
     CACHES_SET -->|"aponta para"| DREDIS
     CACHES_SET -->|"define rota"| LOCATION
@@ -683,14 +683,14 @@ graph TD
     CACHES_SET -->|"instancia em OPTIONS"| CLIENT_CLS
 
     DREDIS -->|"utiliza por baixo"| RPY["🐍 redis-py Socket"]
-    LOCATION -->|"isola recursos no"| DB_LOGIC["🗄️ Banco Lógico /1\n(Separação de Celery)"]
+    LOCATION -->|"isola recursos no"| DB_LOGIC["🗄️ Banco Lógico /1<br/>(Separação de Celery)"]
     RPY -->|"grava na RAM do"| REDIS_SRV["⚡ Redis Server Container"]
     DB_LOGIC -->|"reside no"| REDIS_SRV
 
     %% Conexões com outros módulos / ferramentas externas
-    REDIS_SRV -.->|"gerenciado via"| EXT_DOCKER["🐳 Docker Container\n(Aula 3.2)"]
-    CENTRO -.->|"substitui backends lentos"| EXT_BACKENDS["🗄️ LocMem / DatabaseCache\n(Aula 2.2)"]
-    CENTRO -.->|"habilita cache em"| EXT_DRF["⚡ APIs REST com DRF e Ninja\n(Módulos 4 e 5)"]
+    REDIS_SRV -.->|"gerenciado via"| EXT_DOCKER["🐳 Docker Container<br/>(Aula 3.2)"]
+    CENTRO -.->|"substitui backends lentos"| EXT_BACKENDS["🗄️ LocMem / DatabaseCache<br/>(Aula 2.2)"]
+    CENTRO -.->|"habilita cache em"| EXT_DRF["⚡ APIs REST com DRF e Ninja<br/>(Módulos 4 e 5)"]
 
     style CENTRO fill:#1d3557,color:#fff,stroke-width:3px
     style DREDIS fill:#457b9d,color:#fff
@@ -736,15 +736,15 @@ flowchart TD
     end
 
     subgraph PASSO2["2️⃣ settings.py"]
-        P2["CACHES = {\n  'default': {\n    'BACKEND': 'django_redis.cache.RedisCache',\n    'LOCATION': 'redis://127.0.0.1:6379/1',\n    'OPTIONS': {'CLIENT_CLASS': 'DefaultClient'}\n  }\n}"]
+        P2["CACHES = {<br/>  'default': {<br/>    'BACKEND': 'django_redis.cache.RedisCache',<br/>    'LOCATION': 'redis://127.0.0.1:6379/1',<br/>    'OPTIONS': {'CLIENT_CLASS': 'DefaultClient'}<br/>  }<br/>}"]
     end
 
     subgraph PASSO3["3️⃣ Django Shell"]
-        P3["from django.core.cache import cache\ncache.set('teste', {'chave': 'valor'})"]
+        P3["from django.core.cache import cache<br/>cache.set('teste', {'chave': 'valor'})"]
     end
 
     subgraph PASSO4["4️⃣ Validação com redis-cli"]
-        P4["docker exec -it redis-estudos redis-cli -n 1\nKEYS *\nGET :1:teste"]
+        P4["docker exec -it redis-estudos redis-cli -n 1<br/>KEYS *<br/>GET :1:teste"]
     end
 
     PASSO1 --> PASSO2 --> PASSO3 --> PASSO4
